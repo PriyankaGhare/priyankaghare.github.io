@@ -8,15 +8,16 @@
     include('header.php');
     //start the current session
     session_start();
+    if($_SESSION['username'] == null)
+    {
+        header('Location: index.php');
+    }
     //check for difficulty level
     if(isset($_GET['difficulty']))
     {
         $_SESSION['difficulty'] = $_GET['difficulty'];
     }
-    else
-    {
-        $_SESSION['difficulty'] = 1;
-    }
+
     //all session,global variables and superglobal variables are declared here
     $GLOBALS['score'] = 0;
     $total_chances = 5;
@@ -72,34 +73,32 @@
             break;
         case 2:
             $words = [
-                "MANHANG", "FLYBUTTER" , "LAPPLE", "SERIOUSLY", "COPYCAT",
-                 "TYPICAL", "BEAUTIFUL"
+                "JACKPOT", "ZIGZAG" , "STRETCH", "CYCLE", "LUCKY",
+                 "SUBWAY"
              ];
              $hints = [
-                "MANHANG", "FLYBUTTER" , "LAPPLE", "SERIOUSLY", "COPYCAT",
-                 "TYPICAL", "BEAUTIFUL"
+                "MONEY LOTTERY", "UNEVEN PATH" , "WARMUP EXERCISES", "PROCESSES CYCLE", "GOOD LUCK",
+                 "UNDERGROUND METRO"
              ];
              $diffLevel = "Rookie";
             break;
         case 3:
             $words = [
-                "MEDIUM", "REGISTRAR" , "BANANA", "ORANGE", "KINGDOM",
-                 "TALENT", "HANDSOME"
+                "QUEUE", "WIZARD" , "JOGGING", "SYNDROME", "GAZEBO",
+                 "THUMBSCREW", "ZODIAC"
              ];
              $hints = [
-                "MEDIUM", "REGISTRAR" , "BANANA", "ORANGE", "KINGDOM",
-                 "TALENT", "HANDSOME"
+                "WAITING LINE", "MAGICIAN" , "NOT RUNNING", "GROUP OF SIGNS", "OPEN HUT IN GARDEN",
+                 "NO SCREWDRIVE NEEDED", "CELESTIAL BODY"
              ];
              $diffLevel = "Normal";
             break;
         case 4:
             $words = [
-                "BATMAN", "PENGUIN" , "APPLE", "XING", "FINALLY",
-                 "METICULOUS", "MERICFUL"
+                "VORTEX", "ESPIONAGE" , "PAJAMA", "GALVANIZE", "METICULOUS"
              ];
              $hints = [
-                "BATMAN", "PENGUIN" , "APPLE", "XING", "FINALLY",
-                 "METICULOUS", "MERICFUL"
+                "MASS OF SUBSTANCE", "SPYING" , "NIGHT OUTFIT", "COVERING FOR IRON", "ATTENTION TO DETAIL"
              ];
              $diffLevel = "Hard";
             break;
@@ -120,10 +119,17 @@
     
     // restart the game. Clear the session variables
     function restartGame(){
+        $temp_user = $_SESSION['username'];
         header('Location: main.php?username='.$_SESSION['username']);
         session_destroy();
         session_start();
-        
+        $_SESSION['username'] = $temp_user;
+    }
+
+    function logoutGame(){
+        header('Location: index.php');
+        session_destroy();
+        session_start();
     }
     
     // Get all the hangman Parts
@@ -245,6 +251,11 @@
     if(isset($_GET['start'])){
         restartGame();
     }
+
+    if(isset($_POST['logout']))
+    {
+        logoutGame();
+    }
     
     
     /* Detect when Key is pressed */
@@ -276,12 +287,15 @@
 
 ?>
 
+<form method="post">
+<button class="logout-btn" type="submit" name="logout"><img class="logout-btn-icn" src="imgs/icons/logout.png"/></button>
+</form>
 <div class="game-panel">
     <div class="information-panel">
         <!-- <p class="score-text"> <b>Score:</b> <?php echo $GLOBALS['score']; ?> </p>
         <p class="chances-text"> <b>Chances Left:</b> <?php echo $chances ."/".$total_chances; ?> </p> -->
         <p class="name-text"> <b>User:</b> <?php echo $_SESSION['username']; ?> </p>
-        <p class="score-text"> <b>Hint:</b> <?php echo $current_hint; ?> </p>
+        <p class="score-text"> <b>Hint:</b> <?php echo $_SESSION['hint']; ?> </p>
         <p class="chances-text"> <b>Selected Difficulty:</b> <?php echo $diffLevel; ?> </p>
         
     </div>

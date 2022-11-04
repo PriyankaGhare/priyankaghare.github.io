@@ -1,11 +1,30 @@
 <?php
 
     include('header.php');
+    session_start();
+    if($_SESSION['username'] == null)
+    {
+        header('Location: index.php');
+    }
+
     $current_user = $_GET['username'];
+
+    if(isset($_POST['logout']))
+    {
+        logoutGame();
+    }
+
+    function logoutGame(){
+        header('Location: index.php');
+        session_destroy();
+        session_start();
+    }
 ?>
-
+<form method="post">
+<button class="logout-btn" type="submit" name="logout"><img class="logout-btn-icn" src="imgs/icons/logout.png"/></button>
+</form>
 <div class="form-container">
-
+    
     <p class="another">Choose Difficulty</p>
     
     <table cellpadding="20" cellspacing="20" class="grid-diff-btns">

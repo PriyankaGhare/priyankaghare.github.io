@@ -9,6 +9,5 @@
         <div class="heading-container">
             <img class="game-icn" src="imgs/icons/hangman 2.png">
             <p class="title-hangman"> The Hangman </p>
-
         </div>
     

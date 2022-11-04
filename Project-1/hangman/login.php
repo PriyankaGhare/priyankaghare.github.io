@@ -37,7 +37,12 @@ if (isset($_POST)) {
             }
         }
         if($login)
+        {
+            session_start();
+            $_SESSION['username'] = $current_user;
+            $_SESSION['password'] = $password;
             header('Location: main.php?username='.$current_user);
+        }
         else
         {
             echo "<h3 style='color: red;'>Username or password in incorrect!</h3>";
